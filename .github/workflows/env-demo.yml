@@ -7,7 +7,7 @@ env:
 
 
 jobs:
-  print greeting:
+  print-greeting:
     runs-on: ubuntu-latest
     steps:
     - name: Print greeting
