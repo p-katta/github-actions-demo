@@ -5,16 +5,17 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Use Node.js 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
 
       - name: Run tests
-        run: npm tests
+        run: npm test
 
       - name: Build project
         run: |
@@ -27,17 +28,18 @@ jobs:
           name: dist-files
           path: dist
 
-    deploy:
-      runs-on: ubuntu-latest
-      needs: build
-      steps:
-        - name: Download artifact
-          uses: actions/download-artifact@v4
-          with:
-            name: dist-files
-            path: dist
-        - name: Deploy project
-          run: |
-            echo "Deploying project..."
-            ls -R dist
-            echo "Deployment successful!"  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+
+      - name: Deploy project
+        run: |
+          echo "Deploying project..."
+          ls -R dist
+          echo "Deployment successful!"
